@@ -1,0 +1,20 @@
+{
+  "direction_accuracy": 0.7757520510483136,
+  "strength_correlation": 0.9681771008503366,
+  "training_time_sec": 9.217054843902588,
+  "num_parameters": 27843,
+  "num_samples": {
+    "train": 5116,
+    "val": 1096,
+    "test": 1097
+  },
+  "feature_importance": {
+    "Fx": 0.0,
+    "Fy": 0.0,
+    "||F||": 0.0027347310847766204,
+    "offset_x": -0.001823154056517784,
+    "offset_y": 0.0009115770282588365,
+    "vel_x": 0.027347310847766648,
+    "vel_y": 0.007292616226071136
+  }
+}

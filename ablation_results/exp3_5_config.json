@@ -1,0 +1,5 @@
+{
+  "exp_disable_connection_check": true,
+  "exp_disable_morphology": true,
+  "exp_disable_gray_threshold": true
+}
