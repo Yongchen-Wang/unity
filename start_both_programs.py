@@ -58,7 +58,7 @@ def run_keyboard_preset():
     print("  移动左臂")
     umpL.goto_pos((10000, 10000, 20000, pos_L[3]), speed=200)
     
-    time.sleep(5.0)
+    time.sleep(8.0)
 
     print("✓ 预设位置命令已执行完毕")
     return True
