@@ -5,7 +5,7 @@ from ultralytics import YOLO
 from pathlib import Path
 
 if __name__ == '__main__':
-    model = YOLO("runs/detect/runs/detect/yolo_custom2/weights/best.pt")
+    model = YOLO("runs/segment/runs/segment/yolo_seg_magnet2/weights/best.pt")
     
     # 在验证集上评估（降低置信度阈值，确保能检测到目标）
     metrics = model.val(
@@ -14,7 +14,7 @@ if __name__ == '__main__':
         batch=16,
         device=0,
         workers=0,
-        conf=0.001,  # 降低置信度阈值（默认0.25可能太高）
+        conf=0.392,  # 降低置信度阈值（默认0.25可能太高）
         iou=0.6,     # IoU阈值
     )
     

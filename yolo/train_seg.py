@@ -21,9 +21,6 @@ if __name__ == '__main__':
     
     # 数据集配置文件路径
     dataset_yaml = os.path.join(script_dir, "dataset.yaml")
-    if not os.path.exists(dataset_yaml):
-        print(f"错误: 找不到 dataset.yaml 文件: {dataset_yaml}")
-        exit(1)
     
     # 开始训练
     results = model.train(
@@ -73,7 +70,7 @@ if __name__ == '__main__':
     print("=" * 60)
     
     # # 可选：在验证集上评估
-    # print("\n开始验证...")
-    # metrics = model.val()
-    # print(f"mAP50: {metrics.seg.map50:.4f}")
-    # print(f"mAP50-95: {metrics.seg.map:.4f}")
+    print("\n开始验证...")
+    metrics = model.val()
+    print(f"mAP50: {metrics.seg.map50:.4f}")
+    print(f"mAP50-95: {metrics.seg.map:.4f}")
