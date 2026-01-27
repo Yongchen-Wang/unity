@@ -1,0 +1,11 @@
+# YOLO 实例分割数据集配置文件
+path: yolo_dataset  # 数据集根目录（相对于此文件）
+train: train/images  # 训练集图片路径（相对于 path）
+val: val/images      # 验证集图片路径（相对于 path）
+
+# 类别数量
+nc: 1
+
+# 类别名称
+names:
+  0: magnet  # 磁铁/目标物体
