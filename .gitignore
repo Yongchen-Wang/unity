@@ -21,6 +21,7 @@
 .vs/
 .vscode/
 .idea/
+.cursor/
 
 ## Python
 __pycache__/
@@ -28,6 +29,12 @@ __pycache__/
 *.pyo
 .venv/
 venv/
+
+## Data/output
+yolo/runs/
+left/*.csv
+right/*.csv
+code/Mixed Reality/Sensapex/camera_image_processing/robot_data/*.csv
 
 ## OS
 Thumbs.db

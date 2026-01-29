@@ -52,11 +52,11 @@ def run_keyboard_preset():
     
     # 发送移动命令
     print("  移动右臂")
-    umpR.goto_pos((10000, 10000, 20000, pos_R[3]), speed=200)
+    umpR.goto_pos((20000, 20000, 14000, pos_R[3]), speed=200)
     time.sleep(1.0)  # 间隔1秒
     
     print("  移动左臂")
-    umpL.goto_pos((10000, 10000, 20000, pos_L[3]), speed=200)
+    umpL.goto_pos((0, 3000, 14000, pos_L[3]), speed=200)
     
     time.sleep(8.0)
 
