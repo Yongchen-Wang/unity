@@ -33,13 +33,6 @@ def run_keyboard_preset():
     - 再发送 'q' 退出脚本
     运行完成后，用户按 Enter 再继续启动后面的三个程序
     """
-    print("\n" + "="*50)
-    print("[0/3] 预设 Sensapex 位置...")
-    print("="*50)
-    
-    print("  目标位置: R(10000, 10000, 20000), L(10000, 10000, 20000)")
-    
-
     # 获取设备
     umpL = ump.get_device(1)  # 左臂
     umpR = ump.get_device(2)  # 右臂
@@ -52,11 +45,11 @@ def run_keyboard_preset():
     
     # 发送移动命令
     print("  移动右臂")
-    umpR.goto_pos((20000, 20000, 14500, pos_R[3]), speed=1000)
+    umpR.goto_pos((20000, 20000, 18000, pos_R[3]), speed=1000)
     time.sleep(1.0)  # 间隔1秒
     
     print("  移动左臂")
-    umpL.goto_pos((0, 3000, 14500, pos_L[3]), speed=1000)
+    umpL.goto_pos((0, 6000, 18000, pos_L[3]), speed=1000)
     
     time.sleep(8.0)
 

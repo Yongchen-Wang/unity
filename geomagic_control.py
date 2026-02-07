@@ -1,5 +1,4 @@
 import os
-import csv
 import time
 import socket
 import threading
@@ -17,12 +16,9 @@ UDP_TIMEOUT = 0.15  # UDP接收超时时间（秒）
 DATA_LOGGER_ERROR_PORT = 5009  # robot_data_logger 差值数据端口
 
 # === UMP 初始位置和单位转换 ===
-UMP_INITIAL_POS = (7000, 7000, 20000)  # UMP 初始位置 (x, y, z)
+UMP_INITIAL_POS_L = (0, 6000, 18000)  # 左臂初始位置 (x, y, z)
+UMP_INITIAL_POS_R = (20000, 20000, 18000)  # 右臂初始位置 (x, y, z)
 UMP_TO_MM = 18 / 17000  # 单位转换：17000 UMP 单位 = 18mm
-
-# === 创建保存文件夹 ===
-os.makedirs("left", exist_ok=True)
-os.makedirs("right", exist_ok=True)
 
 # === 初始化 Sensapex 设备 ===
 ump = UMP.get_ump()
@@ -39,7 +35,6 @@ sock_recv.settimeout(UDP_TIMEOUT)  # ⭐ 设置超时，用于检测按钮释放
 last_pos_L = None
 last_pos_R = None
 stop_event = threading.Event()
-start_time = datetime.now().strftime("%Y%m%d_%H%M%S")
 # ⭐ Geomagic Touch 累积位移
 cumulative_dx_L = 0.0  # 左 manipulator 的 x 方向累积位移
 cumulative_dz_L = 0.0  # 左 manipulator 的 z 方向累积位移（对应 UMP 的 y）
@@ -55,14 +50,6 @@ prev_dz_L = 0.0  # 左 manipulator 上一次的 dz
 prev_dx_R = 0.0  # 右 manipulator 上一次的 dx
 prev_dz_R = 0.0  # 右 manipulator 上一次的 dz
 velocity_lock = threading.Lock()  # 用于线程安全访问速度计算变量
-
-# === 文件句柄和Writer初始化 ===
-left_file = open(f"left/{start_time}.csv", "w", newline='')
-right_file = open(f"right/{start_time}.csv", "w", newline='')
-left_writer = csv.writer(left_file)
-right_writer = csv.writer(right_file)
-left_writer.writerow(['timestamp', 'dx', 'dy'])
-right_writer.writerow(['timestamp', 'dx', 'dy'])
 
 # === 坐标转换函数 ===
 def map_position(raw_value):
@@ -121,13 +108,6 @@ def read_and_send():
             msg_R = f"R,{disp_R[0]},{disp_R[1]}"
             sock_send.sendto(msg_L.encode(), (UDP_SEND_IP, UDP_SEND_PORT))
             sock_send.sendto(msg_R.encode(), (UDP_SEND_IP, UDP_SEND_PORT))
-
-            # 写入 CSV（只记录 x、y）
-            timestamp = time.time()
-            left_writer.writerow([timestamp, disp_L[0], disp_L[1]])
-            right_writer.writerow([timestamp, disp_R[0], disp_R[1]])
-            left_file.flush()
-            right_file.flush()
 
         last_pos_L = pos_L
         last_pos_R = pos_R
@@ -207,8 +187,8 @@ def receive_geomagic_and_control():
                 geomagic_dy_ump = -cum_dz * SCALE_FACTOR  # 反转y方向（与控制映射一致）
                 
                 # UMP 相对于固定初始位置的位移
-                ump_dx = current[0] - UMP_INITIAL_POS[0]
-                ump_dy = current[1] - UMP_INITIAL_POS[1]
+                ump_dx = current[0] - UMP_INITIAL_POS_L[0]
+                ump_dy = current[1] - UMP_INITIAL_POS_L[1]
                 
                 # 差值（UMP 单位）= Geomagic Touch 位移 - UMP 位移
                 error_x_ump = geomagic_dx_ump - ump_dx
@@ -269,8 +249,8 @@ def receive_geomagic_and_control():
                 geomagic_dy_ump = cum_dz * SCALE_FACTOR
                 
                 # UMP 相对于固定初始位置的位移
-                ump_dx = current[0] - UMP_INITIAL_POS[0]
-                ump_dy = current[1] - UMP_INITIAL_POS[1]
+                ump_dx = current[0] - UMP_INITIAL_POS_R[0]
+                ump_dy = current[1] - UMP_INITIAL_POS_R[1]
                 
                 # 差值（UMP 单位）= Geomagic Touch 位移 - UMP 位移
                 error_x_ump = geomagic_dx_ump - ump_dx
@@ -313,9 +293,7 @@ t1.join()
 t2.join()
 t3.join()
 
-left_file.close()
-right_file.close()
 sock_send.close()
 sock_recv.close()
-print("Recording stopped and files saved.")
+print("Program stopped.")
 
